@@ -1,0 +1,54 @@
+switch:
+  - platform: template
+    name: "[Switch] Bonavita Kettle"
+    lambda: |-
+      if (id(status).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      then:
+        if:
+          condition:
+            binary_sensor.is_off: status
+          then:
+            - switch.turn_on: power
+            - delay: 500ms
+            - switch.turn_on: hold
+    turn_off_action: 
+      then:
+        if:
+          condition:
+            binary_sensor.is_on: status
+          then:
+            - switch.turn_on: power
+  - platform: gpio
+    id: power
+    internal: true
+    on_turn_on:
+    - delay: 250ms
+    - switch.turn_off: power
+    pin: 
+      number: D1
+    name: "Bonavita Power"
+  - platform: gpio
+    id: hold
+    internal: true
+    on_turn_on:
+    - delay: 250ms
+    - switch.turn_off: hold
+    pin: 
+      number: D2
+    name: "Bonavita Hold Temperature"
+    
+binary_sensor:
+  - platform: gpio
+    id: status
+    pin: 
+      number: D5
+      mode:
+        input: true
+        pullup: true
+      inverted: false
+    name: "Bonavita Status"
