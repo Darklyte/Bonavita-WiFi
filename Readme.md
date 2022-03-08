@@ -33,6 +33,8 @@ This is done using Home Assistant and ESPHome.
 
 ![Circuit Diagram](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Diagram.png)
 
+[Code for ESPHome](https://github.com/Darklyte/Bonavita-WiFi/blob/main/bonavita-code-only.yaml)
+
 Go nuts! Be careful!
 
 ## Background
@@ -77,9 +79,11 @@ Getting the ESP8266 started has always been complicated for me. I'll explain how
 
 [luma](/u/svideo) told me about Optoisolators. I had never heard of them before and honestly they are absolutely amazing. You wire them to two completely isolated circuits. They do not allow the circuits to cross, but they take information from one circuit and act as a switch for the other.
 
-Here is the [PC817 Pinout](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PC817-Pinout-1.png?)^[Source](https://www.theengineeringprojects.com/2017/07/introduction-to-pc817.html). Note that this image shows what each pin is relevant to the text on the chip. Pin 1 will be your input signal (3.3v from the ESP8266, or the 5.5V from the Bonavita board). Pin-2 goes to GND.
+Here is the [PC817 Pinout](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PC817-Pinout-1.png?)^[Source](https://www.theengineeringprojects.com/2017/07/introduction-to-pc817.html)^. Note that this image shows what each pin is relevant to the text on the chip. Pin 1 will be your input signal (3.3v from the ESP8266, or the 5.5V from the Bonavita board). Pin-2 goes to GND.
 
-[Here is a diagram of how they work](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PC817%20Diode%20bridge%20working.gif)^[Source](https://microcontrollerslab.com/pc817-optocoupler-pinout-working-examples-datasheet/). They grounds and power sources should be isolated, each circuit having their own. The optoisolator take the input signal from the control circuit (left side) and cause an inverse signal in the receiving circuit (right side). When the control circuit is high, the receiving circuit is low.
+Here is the diagram of how they work.
+
+![Here is a diagram of how they work](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PC817%20Diode%20bridge%20working.gif)^[Source](https://microcontrollerslab.com/pc817-optocoupler-pinout-working-examples-datasheet/)^. They grounds and power sources should be isolated, each circuit having their own. The optoisolator take the input signal from the control circuit (left side) and cause an inverse signal in the receiving circuit (right side). When the control circuit is high, the receiving circuit is low.
 
 On the receiving circuit side, however, you can reverse the signal. If you wire Pin 4 to ground and Pin 3 to signal, the receiving circuit will output will be the same as the controlling circuit (high when high, low when low).
 
@@ -88,7 +92,7 @@ On the receiving circuit side, however, you can reverse the signal. If you wire 
 
 ### Bonavita's Electronics
 
-[Here is a control board for the bonavita](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Markup.png). Specifically, this is the back of the board where the buttons are. 
+![Here is a control board for the bonavita](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Markup.png). Specifically, this is the back of the board where the buttons are. 
 
 * **Ground (Black)**: The entire lower section is ground. You can connect everything that is returning to ground to one solder point, or if you want you can break it up, but ultimately every point on the gold section is the same point.
 
@@ -118,7 +122,7 @@ When you [look at a breadboard](https://github.com/Darklyte/Bonavita-WiFi/blob/m
 
 ## Building the circuit.
 
-[The circuit diagram is here](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Diagram.png), but I want to make it as readable as possible for those beginning. [Here is an edited version of the circuit with physical devices](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Physical%20Circuit.png).
+![The circuit diagram is here](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Diagram.png), but I want to make it as readable as possible for those beginning. [Here is an edited version of the circuit with physical devices](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Physical%20Circuit.png).
 
 The black lines are wires. When wires cross path, there is a dot if they are connect. If there is no dot and it isn't touching a component, the wires are not connected.
 
@@ -158,68 +162,15 @@ wifi:
 
 Install your new config. If that works, great! We're done here for now. You can unplug the board from your home assistant device. Add the following code at the bottom of the config, then install and make sure it still connects.
 
-```
-switch:
-  - platform: template
-    name: "[Switch] Bonavita Kettle"
-    lambda: |-
-      if (id(status).state) {
-        return true;
-      } else {
-        return false;
-      }
-    turn_on_action:
-      then:
-        if:
-          condition:
-            binary_sensor.is_off: status
-          then:
-            - switch.turn_on: power
-            - delay: 500ms
-            - switch.turn_on: hold
-    turn_off_action: 
-      then:
-        if:
-          condition:
-            binary_sensor.is_on: status
-          then:
-            - switch.turn_on: power
-  - platform: gpio
-    id: power
-    internal: true
-    on_turn_on:
-    - delay: 250ms
-    - switch.turn_off: power
-    pin: 
-      number: D1
-    name: "Bonavita Power"
-  - platform: gpio
-    id: hold
-    internal: true
-    on_turn_on:
-    - delay: 250ms
-    - switch.turn_off: hold
-    pin: 
-      number: D2
-    name: "Bonavita Hold Temperature"
-    
-binary_sensor:
-  - platform: gpio
-    id: status
-    pin: 
-      number: D5
-      mode:
-        input: true
-        pullup: true
-      inverted: false
-    name: "Bonavita Status"
-```
+[Code is here](https://github.com/Darklyte/Bonavita-WiFi/blob/main/bonavita-code-only.yaml)
 
 Once this works, go back to Home Assistant, and go to Configuation -> Devices & Services > Add Integration (Bottom Right). Search for `ESPHome` and add it.  Give it the IP address or identifier of your bonavita. It should add the device and entities.
 
 ### Preparing the Bonavita
 
-Unplug your bonavita and empty the kettle, leaving maybe 300ml to absorb heat when testing. With a tri-wing screwdriver, remove the [5 outer-most screws on the bottom (two are recessed near the front. Ignore the three in the middle)](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PXL_20220308_192411538.MP.jpg). Pull the top and bottom apart, pushing the outlet cord through to give slack to allow the bottom to fall away more.
+Unplug your bonavita and empty the kettle, leaving maybe 300ml to absorb heat when testing. With a tri-wing screwdriver, remove the 5 outer-most screws on the bottom. Pull the top and bottom apart, pushing the outlet cord through to give slack to allow the bottom to fall away more.
+
+![5 outer-most screws on the bottom (two are recessed near the front. Ignore the three in the middle)](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PXL_20220308_192411538.MP.jpg). 
 
 Solder a wire length to a ground point. Solder one length to each of the, Power Button, and Hold button points. Optionally, solder an additional lengths to the Temp+, and Temp- points. 
 
