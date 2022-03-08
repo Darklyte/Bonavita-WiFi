@@ -236,5 +236,12 @@ Actually, this part is so dangerous I don't really feel comfortable instructing 
 
 ## Finishing up
 
-Once everything is done, you can wrap all the parts in electrical tape to prevent them from shorting. Stuff all the parts into the ample space of the bonavita base, then seal it up.  Enjoy your wifi kettle. 
+Once everything is done, you can wrap all the parts in electrical tape to prevent them from shorting. Stuff all the parts into the ample space of the bonavita base, then seal it up.  Here is what mine looked like. I was having trouble with a single ground, so I did a ground for each connection.
+
+![Finished Inside](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PXL_20220307_004725006.MP.jpg)
+
+![Finished Product](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Finished%20Product.jpg)
+
+Enjoy your wifi kettle. 
+
 
