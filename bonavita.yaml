@@ -1,0 +1,84 @@
+esphome:
+  name: bonavita
+
+esp8266:
+  board: nodemcuv2
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "e5090c7c46abf56e7f92c80380febc69"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  use_address: 192.168.1.189
+  manual_ip:
+    static_ip: 192.168.1.189
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Bonavita Fallback Hotspot"
+    password: "eXH9kyAToCuu"
+
+captive_portal:
+
+switch:
+  - platform: template
+    name: "[Switch] Bonavita Kettle"
+    lambda: |-
+      if (id(status).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      then:
+        if:
+          condition:
+            binary_sensor.is_off: status
+          then:
+            - switch.turn_on: power
+            - delay: 500ms
+            - switch.turn_on: hold
+    turn_off_action: 
+      then:
+        if:
+          condition:
+            binary_sensor.is_on: status
+          then:
+            - switch.turn_on: power
+  - platform: gpio
+    id: power
+    internal: true
+    on_turn_on:
+    - delay: 250ms
+    - switch.turn_off: power
+    pin: 
+      number: D1
+    name: "Bonavita Power"
+  - platform: gpio
+    id: hold
+    internal: true
+    on_turn_on:
+    - delay: 250ms
+    - switch.turn_off: hold
+    pin: 
+      number: D2
+    name: "Bonavita Hold Temperature"
+    
+binary_sensor:
+  - platform: gpio
+    id: status
+    pin: 
+      number: D5
+      mode:
+        input: true
+        pullup: true
+      inverted: false
+    name: "Bonavita Status"
