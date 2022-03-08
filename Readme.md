@@ -31,7 +31,9 @@ This is done using Home Assistant and ESPHome.
 * A small Prototype board or breadboard ([Recommended](https://www.amazon.com/dp/B081MSKJJX)
 * [Assorted lengths of wire](https://i.imgur.com/83lc2kr.jpg) (solid core recommended)
 
-[Circuit Diagram](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Diagram.png)
+![Circuit Diagram](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Diagram.png)
+
+Go nuts! Be careful!
 
 ## Background
 
