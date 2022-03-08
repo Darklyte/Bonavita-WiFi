@@ -21,7 +21,7 @@ This is done using Home Assistant and ESPHome.
 * LEDs
 
 ### Consumables
-* ESP8266-wifi board
+* [ESP8266-wifi board](https://www.amazon.com//dp/B08N5WTQ4Q/) 
 * 2-6 [PC817 optoisolators](https://www.ebay.com/sch/i.html?_from=R40&_trksid=m570.l1313&_nkw=PC817&_sacat=0) (2 minimum, 3 recommended)
 * 1 decent-quality USB wall charger
 * 1 wall power cable that you don't mind destroying (optional)
@@ -31,7 +31,7 @@ This is done using Home Assistant and ESPHome.
 * A small Prototype board or breadboard ([Recommended](https://www.amazon.com/dp/B081MSKJJX)
 * [Assorted lengths of wire](https://i.imgur.com/83lc2kr.jpg) (solid core recommended)
 
-[Circuit Diagram](https://i.imgur.com/stxLh0H.png)
+[Circuit Diagram](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Diagram.png)
 
 ## Background
 
@@ -75,9 +75,9 @@ Getting the ESP8266 started has always been complicated for me. I'll explain how
 
 [luma](/u/svideo) told me about Optoisolators. I had never heard of them before and honestly they are absolutely amazing. You wire them to two completely isolated circuits. They do not allow the circuits to cross, but they take information from one circuit and act as a switch for the other.
 
-Here is the [PC817 Pinout](https://i.imgur.com/FVGsUMM.png)^[Source](https://www.theengineeringprojects.com/2017/07/introduction-to-pc817.html). Note that this image shows what each pin is relevant to the text on the chip. Pin 1 will be your input signal (3.3v from the ESP8266, or the 5.5V from the Bonavita board). Pin-2 goes to GND.
+Here is the [PC817 Pinout](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PC817-Pinout-1.png?)^[Source](https://www.theengineeringprojects.com/2017/07/introduction-to-pc817.html). Note that this image shows what each pin is relevant to the text on the chip. Pin 1 will be your input signal (3.3v from the ESP8266, or the 5.5V from the Bonavita board). Pin-2 goes to GND.
 
-[Here is a diagram of how they work](https://i.imgur.com/OQHtE3b.gif)^[Source](https://microcontrollerslab.com/pc817-optocoupler-pinout-working-examples-datasheet/). They grounds and power sources should be isolated, each circuit having their own. The optoisolator take the input signal from the control circuit (left side) and cause an inverse signal in the receiving circuit (right side). When the control circuit is high, the receiving circuit is low.
+[Here is a diagram of how they work](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PC817%20Diode%20bridge%20working.gif)^[Source](https://microcontrollerslab.com/pc817-optocoupler-pinout-working-examples-datasheet/). They grounds and power sources should be isolated, each circuit having their own. The optoisolator take the input signal from the control circuit (left side) and cause an inverse signal in the receiving circuit (right side). When the control circuit is high, the receiving circuit is low.
 
 On the receiving circuit side, however, you can reverse the signal. If you wire Pin 4 to ground and Pin 3 to signal, the receiving circuit will output will be the same as the controlling circuit (high when high, low when low).
 
@@ -86,7 +86,7 @@ On the receiving circuit side, however, you can reverse the signal. If you wire 
 
 ### Bonavita's Electronics
 
-[Here is a control board for the bonavita](https://i.imgur.com/PJzM4Sj.png). Specifically, this is the back of the board where the buttons are. 
+[Here is a control board for the bonavita](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Markup.png). Specifically, this is the back of the board where the buttons are. 
 
 * **Ground (Black)**: The entire lower section is ground. You can connect everything that is returning to ground to one solder point, or if you want you can break it up, but ultimately every point on the gold section is the same point.
 
@@ -111,12 +111,12 @@ I thought I could power through ESP8266 through the 5.5V input that the bonavita
 
 You should use a breadboard for testing, and then switch everything to a Prototype board (ideally a printed circuit board, but who has the time/money for that?). 
 
-When you [look at a breadboard](https://i.imgur.com/KquBI8g.png), You'll notice it has deep channel dividing it in half. It then has rows of holes. The rows are connected together on the bottom of the board, and the channel divides them in half. For example, on this board Pin 1A connects to 1B, 1C, 1D, and 1E, but not to any other pins.
+When you [look at a breadboard](https://github.com/Darklyte/Bonavita-WiFi/blob/main/13217.Jpg), You'll notice it has deep channel dividing it in half. It then has rows of holes. The rows are connected together on the bottom of the board, and the channel divides them in half. For example, on this board Pin 1A connects to 1B, 1C, 1D, and 1E, but not to any other pins.
 
 
 ## Building the circuit.
 
-[The circuit diagram is here](https://i.imgur.com/stxLh0H.png), but I want to make it as readable as possible for those beginning. Here is an edited version of the circuit with physical devices](https://i.imgur.com/CvA8G1f.png).
+[The circuit diagram is here](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Bonavita%20Circuit%20Diagram.png), but I want to make it as readable as possible for those beginning. [Here is an edited version of the circuit with physical devices](https://github.com/Darklyte/Bonavita-WiFi/blob/main/Physical%20Circuit.png).
 
 The black lines are wires. When wires cross path, there is a dot if they are connect. If there is no dot and it isn't touching a component, the wires are not connected.
 
@@ -217,7 +217,7 @@ Once this works, go back to Home Assistant, and go to Configuation -> Devices & 
 
 ### Preparing the Bonavita
 
-Unplug your bonavita and empty the kettle, leaving maybe 300ml to absorb heat when testing. With a tri-wing screwdriver, remove the [5 outer-most screws on the bottom (two are recessed near the front. Ignore the three in the middle)](https://i.imgur.com/IbRYcoc.jpg). Pull the top and bottom apart, pushing the outlet cord through to give slack to allow the bottom to fall away more.
+Unplug your bonavita and empty the kettle, leaving maybe 300ml to absorb heat when testing. With a tri-wing screwdriver, remove the [5 outer-most screws on the bottom (two are recessed near the front. Ignore the three in the middle)](https://github.com/Darklyte/Bonavita-WiFi/blob/main/PXL_20220308_192411538.MP.jpg). Pull the top and bottom apart, pushing the outlet cord through to give slack to allow the bottom to fall away more.
 
 Solder a wire length to a ground point. Solder one length to each of the, Power Button, and Hold button points. Optionally, solder an additional lengths to the Temp+, and Temp- points. 
 
